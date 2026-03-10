@@ -38,5 +38,48 @@
  *   // => { selected: [{ color: "golden", length: 5, cost: 250 }], totalLength: 5, totalCost: 250 }
  */
 export function diwaliLightsPlan(lightStrings, budget) {
-  // Your code here
+  // Validation
+  if (!Array.isArray(lightStrings) || typeof budget !== 'number' || budget <= 0) {
+    return { selected: [], totalLength: 0, totalCost: 0 };
+  }
+
+  const selected = [];
+  let totalCost = 0;
+  let totalLength = 0;
+
+  // Step 1: Use for...of to add all light strings with costs
+  for (const lightString of lightStrings) {
+    const { color, length } = lightString;
+
+    // Calculate cost per meter based on color
+    let costPerMeter;
+    switch (color) {
+      case 'golden':
+        costPerMeter = 50;
+        break;
+      case 'multicolor':
+        costPerMeter = 40;
+        break;
+      case 'white':
+        costPerMeter = 30;
+        break;
+      default:
+        costPerMeter = 35;
+    }
+
+    const cost = length * costPerMeter;
+    selected.push({ color, length, cost });
+    totalCost += cost;
+    totalLength += length;
+  }
+
+  // Step 2: Use while loop to remove items if over budget
+  while (totalCost > budget && selected.length > 0) {
+    // Remove the last item
+    const removedItem = selected.pop();
+    totalCost -= removedItem.cost;
+    totalLength -= removedItem.length;
+  }
+
+  return { selected, totalLength, totalCost };
 }

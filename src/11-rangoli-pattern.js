@@ -36,5 +36,47 @@
  *   rangoli(3) // => ["  *", " * *", "* * *", " * *", "  *"]
  */
 export function rangoli(n) {
-  // Your code here
+  // Validation: n must be a positive integer
+  if (typeof n !== 'number' || !Number.isInteger(n) || n <= 0) {
+    return [];
+  }
+
+  const result = [];
+  const totalRows = 2 * n - 1;
+
+  // Generate all rows
+  for (let row = 1; row <= totalRows; row++) {
+    // Determine number of stars for this row
+    let starsInRow;
+    if (row <= n) {
+      starsInRow = row;
+    } else {
+      // Mirror the top half
+      starsInRow = totalRows - row + 1;
+    }
+
+    // Build the row string
+    let rowString = '';
+
+    // Generate stars separated by spaces
+    for (let star = 0; star < starsInRow; star++) {
+      if (star > 0) {
+        rowString += ' ';
+      }
+      rowString += '*';
+    }
+
+    // Add leading spaces for center alignment
+    // The widest row has n stars: "* * * ... *" 
+    // which has 2*n-1 characters (n stars + (n-1) spaces)
+    const widthOfWidestRow = 2 * n - 1;
+    const widthOfCurrentRow = 2 * starsInRow - 1;
+    const leadingSpaces = (widthOfWidestRow - widthOfCurrentRow) / 2;
+
+    rowString = ' '.repeat(leadingSpaces) + rowString;
+
+    result.push(rowString);
+  }
+
+  return result;
 }
